@@ -28,7 +28,9 @@
         const renderer = new THREE.WebGLRenderer();
         
         renderer.setSize( window.innerWidth, window.innerHeight );
-        renderer.shadowMapEnabled = true;
+        // renderizar las sombras
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
 
         const axes = new THREE.AxisHelper(20);
         scene.add( axes );
@@ -38,7 +40,9 @@
         const planeMaterial = new THREE.MeshLambertMaterial( { color: 0xCCCCCC } );
         // const planeMaterial = new THREE.MeshBasicMaterial( { color: 0xCCCCCC } );
         const plane = new THREE.Mesh( planeGeometry, planeMaterial );
-        
+        // indicar que reciba sombra
+        plane.receiveShadow = true;
+
         // rotamos y posicionamos el plano
         plane.rotation.x = -0.5*Math.PI;
         plane.position.x = 15;
@@ -53,6 +57,9 @@
         // const cubeMaterial = new THREE.MeshBasicMaterial( { color: 0xFF0000, wireframe: true } );
         const cubeMaterial = new THREE.MeshLambertMaterial( { color: 0xFF0000 } );
         const cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+        // indicar que emita sombra
+        cube.castShadow = true;
+        
         // posicionamos el cubo
         cube.position.x = -4;
         cube.position.y = 3;
@@ -66,11 +73,15 @@
         // const sphereMaterial = new THREE.MeshBasicMaterial( { color: 0x7777FF, wireframe: true } );
         const sphereMaterial = new THREE.MeshLambertMaterial( { color: 0x7777FF } );
         const sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+        
         // posicionamos la esfera
         sphere.position.x = 20;
         sphere.position.y = 4;
         sphere.position.z = 2;
         
+        // indicar que emita sombra
+        sphere.castShadow = true;
+
         // añadimos la esfera a la escena
         scene.add( sphere );
         
@@ -84,6 +95,8 @@
         const spotLight = new THREE.SpotLight( 0xffffff );
         spotLight.position.set( -40, 60, -10 );
 
+        // encender las sombras para la luz
+        spotLight.castShadow = true;
         // añadimos el spotLight a la escena
         scene.add( spotLight );
 
