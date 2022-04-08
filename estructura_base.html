@@ -13,12 +13,17 @@
             overflow: hidden;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/16/Stats.min.js" integrity="sha512-by6gRzSfA6HGshqED4Jnc6n/jJ9ojBvjbEbCvsrLzErlIiWswh1qYfYnvSzZg8SmbqVCk/v0XwlpGzJxIDPILw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
+
+    <div id="Stats-salida"></div>
 
     <script src="js/three.js"></script>
     
     <script>
+        const stats = initStats();
+
         // Creamos una scene, que contendrá todos nuestros elementos, como objetos, cámaras y luces.
         const scene = new THREE.Scene();
         
@@ -32,7 +37,7 @@
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
 
-        const axes = new THREE.AxisHelper(20);
+        const axes = new THREE.AxesHelper(20);
         scene.add( axes );
 
         // creamos el plano del suelo
@@ -103,7 +108,39 @@
         // añadir la salida de la renderización al body del html
         document.body.appendChild( renderer.domElement );
         // renderizar la escena
-        renderer.render( scene, camera );
+        render();
+        
+        function render() {
+            // avisar a stats de nueva renderización
+            stats.update();
+
+            // rotar cubo
+            cube.rotation.x += 0.02;
+            cube.rotation.y += 0.02;
+            cube.rotation.z += 0.02;
+
+            // renderizar la escena con requestAnimationFrame
+            requestAnimationFrame( render );
+            renderer.render( scene, camera );
+
+        };
+
+        function initStats() {
+            let stats = new Stats();
+
+            stats.setMode(0); // 0: fps, 1: ms
+
+            // Align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            document.getElementById("Stats-salida").append(stats.domElement);
+
+            return stats;
+        }
+
+
 
     </script>
 </body>
